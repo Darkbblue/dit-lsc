@@ -4,7 +4,7 @@
 Diffusion feature has been a hot search topic in recent years. The basic idea is to extract activations during a network forward call and use them as dense vision features for various vision tasks. **However, it's been hard to obtain high-quality diffusion features from DiT backbones,**, despite the success in U-Net diffusion models. Want to know why? This paper will provide our opinion.  
 
 ## Installation
-First install generic-diffusion-feature... then the installation is done! I guess that repo's environment already contains what most diffusion studies would need. But if you've installed that repo *before*, some update in that repo might require you to update your environment as well.
+First install [generic-diffusion-feature](https://github.com/Darkbblue/generic-diffusion-feature)... then the installation is done! I guess that repo's environment already contains what most diffusion studies would need. But if you've installed that repo *before*, some update in that repo might require you to update your environment as well.
 
 ## How to run the codes
 ### Training
