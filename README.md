@@ -1,7 +1,35 @@
-# DiT-LSC
+# DiT-LSC: Why DiT Models Underperform as Representation Learners without Long Skip Connections
 
 ## Why you might get interested...
-Diffusion feature has been a hot search topic in recent years. The basic idea is to extract activations during a network forward call and use them as dense vision features for various vision tasks. **However, it's been hard to obtain high-quality diffusion features from DiT backbones,**, despite the success in U-Net diffusion models. Want to know why? This paper will provide our opinion.  
+Diffusion feature has been a hot research topic in recent years. The basic idea is to extract activations during a network forward call and use them as dense vision features for various vision tasks. **However, it's been hard to obtain high-quality diffusion features from DiT backbones**, despite the success in U-Net diffusion models. Want to know why? [This paper](placeholder) will provide our opinion.  
+
+![](figures/illustration.jpg)  
+
+Check the figure above.
+A key observation is that, the diffusion backbone predicts a certain target, such as noise $\epsilon$ or velocity $v$, *not* the original clean image itself.
+But we know diffusion features can be used for vision tasks, indicating that they do contain information about the clean image.
+Hence, diffusion features are just an *intermediate* state extracted from *middle* layers, utilized for the final prediction of the output signal in *deep* layers.
+(In fact, this has inspired our [other study](https://github.com/Darkbblue/dit-compare).)
+
+![](figures/mechanism.jpg)  
+
+Furthermore, we hypothesize that, the final prediction requires two signals: the clean image *and* the input noise.
+A simple example to help interpret this: to predict $\epsilon$, which is a direction telling where to move next, the backbone needs to know its current location on the denoising trajectory (provided by the input noise signal) as well as its target location (provided by the clean image signal).
+Of the two signals, the clean image is the diffusion features, which form in the middle layers, while the noise signal is contained in the backbone input, and *both of them should be carried to the deep layers*.
+In a standard DiT model, this means that the input noise signal needs to be carried through the entire backbone, effectively *polluting* the diffusion features extracted from middle layers.
+The right part of the figure above shows this process. See how the grey arrow stays in the same width throughout?
+Then, a solution would be to add *long skip connections* (LSC) to the backbone, as shown in the figure below.
+They are a common and actually mandatory structure in U-Net models.
+LSCs enable the noise signal to be shortcut through LSCs, leaving diffusion features cleaner and thus better.
+The left part of the figure above shows this process. You can notice how the arrow becomes narrower in the middle layers.
+
+![](figures/lsc-dit-structure.jpg)  
+
+We wish to point out that we are not just proposing a method to improve diffusion feature quality.
+We are revealing a part of the diffusion backbone mechanism, which we believe might be more interesting.
+
+Also, there're other studies such as [Skip-DiT](https://github.com/opensparsellms/skip-dit) and [U-ViT](https://github.com/baofff/u-vit) that show LSCs are good for diffusion *generation* as well.
+We might have enough evidence to consider making LSCs a standard practice in DiT models.
 
 ## Installation
 First install [generic-diffusion-feature](https://github.com/Darkbblue/generic-diffusion-feature)... then the installation is done! I guess that repo's environment already contains what most diffusion studies would need. But if you've installed that repo *before*, some update in that repo might require you to update your environment as well.
@@ -32,6 +60,7 @@ python3 dit-variants-training/JiT/main_jit.py --lsc_type "w/ LSC dense" --output
 # you need to replace the placeholder dirs with the actual paths you want to use
 # OPTIONS:
 #	--lsc_type: search for args.lsc_type in the main_jit.py to see all the options
+#	--lsc_addon: basic for the LSC structure in main paper and v-pred for the structure in appendix
 
 # DiT-du
 python3 dit-variants-training/DiT-du/train.py --model DiT-UNet-XL/2 --lsc_type "w/o LSC" --global-batch-size 192 --num-workers 56 --data-path /path/to/imagenet/root --results-dir /path/to/checkpoints/DiT-du --vae /path/to/sd-vae-ft-ema
