@@ -139,3 +139,7 @@ JiT evaluation is done in a different way:
 ```bash
 python3 dit-variants-training/JiT/main_jit.py --lsc_type "w/ LSC dense" --output_dir /path/to/JiT-new/w-LSC-dense-vpred/gen-30  --resume /path/to/jit-w/checkpoint-30.pth --model JiT-L/16 --img_size 256 --noise_scale 1.0 --gen_bsz 256 --num_images 10000 --cfg 2.4 --interval_min 0.1 --interval_max 1.0 --data_path /path/to/imagenet/root --evaluate_gen
 ```
+
+## Citation
+When mentioning this study, it wants to be named as *DiT-LSC*.
+Bib is still in preparation, as it's weekend and arXiv volunteers are not working now.
