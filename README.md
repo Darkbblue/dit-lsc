@@ -127,7 +127,7 @@ python3 linear_probing.py --version "dit w/ lsc" --t 50 --cache_dir /path/to/lin
 ```
 
 ### Generation evaluation
-DiT, SiT, and DiT-du checkpoints use the same generation evaluation pipeline. You need to download an npz file precomputed from imagenet, which I believe can be found in the torch-fidelity repo or by following DiT repo instructions.
+DiT, SiT, and DiT-du checkpoints use the same generation evaluation pipeline. You need to download an npz file precomputed from imagenet, which I believe can be found in the [torch-fidelity](https://github.com/toshas/torch-fidelity) repo or by following [DiT](https://github.com/facebookresearch/dit) repo instructions.
 ```bash
 python3 dit-variants-training/DiT/sample_ddp.py --model DiT-XL/2 --lsc_type "w/ LSC dense" --sample-dir /path/to/outputs/dit-generation/w-LSC --ckpt /path/to/checkpoints/DiT-256/001-DiT-XL-2-w_-LSC-dense/checkpoints/0400000.pt --per-proc-batch-size 48 --cfg-scale 1 --vae /path/to/sd-vae-ft-ema
 # for SiT, add ODE before all the other arguments. e.g., python3 sample_ddp.py ODE --model SiT-XL/2 ...
